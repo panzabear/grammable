@@ -10,7 +10,6 @@ RSpec.describe GramsController, type: :controller do
             sign_in user
             delete :destroy, params: { id: gram.id }
             expect(response).to have_http_status(:forbidden)
-
         end
         
         it "shouldn't let unauthenticated users destroy a gram" do
@@ -60,10 +59,12 @@ RSpec.describe GramsController, type: :controller do
         end
 
         it "should return a 404 error message if the gram is not found" do
+            user = FactoryBot.create(:user)
+            sign_in user
+
             get :edit, params: { id: "SWAG" }
             expect(response).to have_http_status(:not_found)
         end
-
    end 
 
     describe "grams#update action" do
@@ -153,7 +154,7 @@ RSpec.describe GramsController, type: :controller do
     describe "grams#create action" do
 
         it "should require users to be logged in" do
-            post :create, params: {gram: { message: "Hello"}}
+            post :create, params: { gram: { message: "Hello" } }
             expect(response).to redirect_to new_user_session_path
         end
 
