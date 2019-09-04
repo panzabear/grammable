@@ -13,13 +13,13 @@ class GramsController < ApplicationController
     end
 
     def index
+        @grams = Gram.all
     end
 
     def update
         @gram = Gram.find_by_id(params[:id])
         return render_not_found if @gram.blank?
         return render_not_found(:forbidden) if @gram.user != current_user
-
         @gram.update_attributes(gram_params)
 
         if @gram.valid?
@@ -40,11 +40,8 @@ class GramsController < ApplicationController
         return render_not_found(:forbidden) if @gram.user != current_user
         @gram.destroy
         redirect_to root_path
-      end
     end
     
-
-
     def create
         @gram = current_user.grams.create(gram_params)
         if @gram.valid?
@@ -58,11 +55,11 @@ class GramsController < ApplicationController
     private
 
     def gram_params
-        params.require(:gram).permit(:message)
+        params.require(:gram).permit(:message, :picture)
     end
 
-    def render_not_found
-        render plain: '#{status.to_s.titleize}:(', status: status
+    def render_not_found(status=:not_found)
+        render plain: '#{status.to_s.titleize} :(', status: status
     end
 
 

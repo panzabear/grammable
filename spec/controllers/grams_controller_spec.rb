@@ -36,6 +36,7 @@ RSpec.describe GramsController, type: :controller do
     end
 
    describe "grams#edit action" do 
+
         it "shouldn't let a user who did not create the gram edit a gram" do 
             gram = FactoryBot.create(:gram)
             user = FactoryBot.create(:user)
@@ -53,7 +54,6 @@ RSpec.describe GramsController, type: :controller do
         it "should successfully show the edit form if the gram is found" do
             gram = FactoryBot.create(:gram)
             sign_in gram.user
-            
             get :edit, params: { id: gram.id }
             expect(response).to have_http_status(:success)
         end
@@ -61,14 +61,14 @@ RSpec.describe GramsController, type: :controller do
         it "should return a 404 error message if the gram is not found" do
             user = FactoryBot.create(:user)
             sign_in user
-
             get :edit, params: { id: "SWAG" }
             expect(response).to have_http_status(:not_found)
         end
-   end 
+    end
 
     describe "grams#update action" do
-        it "shouldn't let users who didn't create the gram udpate it" do 
+    
+        it "shouldn't let users who didn't create the gram update it" do 
             gram = FactoryBot.create(:gram)
             user = FactoryBot.create(:user)
             sign_in user
@@ -76,9 +76,7 @@ RSpec.describe GramsController, type: :controller do
             expect(response).to have_http_status(:forbidden)
         
         end
-        
-    
-    
+         
         it "shouldn't let unauthenticated users update a gram" do
             gram = FactoryBot.create(:gram)
             patch :update, params: { id: gram.id, gram: { message: "Hello" } }
